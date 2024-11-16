@@ -6,12 +6,16 @@
       "@/*": [
         "./*"
       ]
-    }
+    },
+    "types": [
+      "nativewind/types"
+    ]
   },
   "include": [
     "**/*.ts",
     "**/*.tsx",
     ".expo/types/**/*.ts",
-    "expo-env.d.ts"
-  ]
+    "expo-env.d.ts",
+    "nativewind-env.d.ts"
+, "app/_layout.jsx", "app/+html.jsx", "app/+not-found.jsx", "app/index.jsx", "app/search/[query].jsx", "app/(tabs)/saved.jsx", "app/(tabs)/profile.jsx", "app/(tabs)/home.jsx", "app/(tabs)/create.jsx", "app/(tabs)/_layout.jsx", "app/(auth)/_layout.jsx", "app/(auth)/sign-in.jsx", "app/(auth)/sign-up.jsx"  ]
 }
