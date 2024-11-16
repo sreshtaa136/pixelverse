@@ -1,11 +1,83 @@
-import { View, Text } from "react-native";
-import React from "react";
+import { View, Text, Image, Dimensions } from "react-native";
+import React, { useState } from "react";
+import {
+  GestureHandlerRootView,
+  ScrollView,
+} from "react-native-gesture-handler";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { StatusBar } from "expo-status-bar";
+import { images } from "../../constants";
+import FormField from "@/components/FormField";
+import CustomButton from "@/components/CustomButton";
+import { Link } from "expo-router";
 
 const SignUp = () => {
+  const [formData, setFormData] = useState({username: "", email: "", password: ""});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  async function handleSubmit() {}
+
   return (
-    <View>
-      <Text>SignUp</Text>
-    </View>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <SafeAreaView className="bg-primary h-full">
+        <ScrollView contentContainerStyle={{ height: "100%" }}>
+          <View
+            className="h-full w-full justify-center px-4"
+            style={{
+              minHeight: Dimensions.get("window").height - 100,
+            }}
+          >
+            <Image
+              source={images.logo}
+              className="w-[10rem] h-[3rem]"
+              resizeMode="contain"
+            />
+            <Text className="text-2xl text-white font-psemibold mt-12">
+              Sign up to Aura
+            </Text>
+            <FormField
+              title="Username"
+              value={formData.username}
+              handleChangeText={(e) => setFormData({ ...formData, username: e })}
+              otherStyles="mt-10"
+            />
+            <FormField
+              title="Email"
+              value={formData.email}
+              handleChangeText={(e) => setFormData({ ...formData, email: e })}
+              otherStyles="mt-7"
+              keyboardType="email-address"
+            />
+            <FormField
+              title="Password"
+              value={formData.password}
+              handleChangeText={(e) =>
+                setFormData({ ...formData, password: e })
+              }
+              otherStyles="mt-7"
+            />
+            <CustomButton
+              title={"Sign Up"}
+              containerStyles={"mt-12"}
+              handlePress={handleSubmit}
+              isLoading={isSubmitting}
+            />
+            <View className="flex justify-center pt-5 flex-row gap-2">
+              <Text className="text-lg text-gray-100 font-pregular">
+                Already have an account?
+              </Text>
+              <Link
+                href="/sign-in"
+                className="text-lg font-psemibold text-secondary underline"
+              >
+                Sign In
+              </Link>
+            </View>
+          </View>
+        </ScrollView>
+        <StatusBar backgroundColor="#161622" style="light" />
+      </SafeAreaView>
+    </GestureHandlerRootView>
   );
 };
 
