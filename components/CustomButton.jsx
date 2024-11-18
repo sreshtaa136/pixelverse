@@ -9,8 +9,10 @@ const CustomButton = ({
   textStyles,
   isLoading,
 }) => {
+  console.log("CustomButton rendered, handlePress:", handlePress);
   return (
     <TouchableOpacity
+      // onPress={console.log("Button pressed!")}
       onPress={handlePress}
       activeOpacity={0.7} // button opacity once pressed
       className={`bg-secondary rounded-md min-h-[62px] justify-center items-center ${containerStyles} ${

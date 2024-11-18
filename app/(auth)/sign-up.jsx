@@ -1,4 +1,4 @@
-import { View, Text, Image, Dimensions } from "react-native";
+import { View, Text, Image, Dimensions, Alert } from "react-native";
 import React, { useState } from "react";
 import {
   GestureHandlerRootView,
@@ -9,20 +9,55 @@ import { StatusBar } from "expo-status-bar";
 import { images } from "../../constants";
 import FormField from "@/components/FormField";
 import CustomButton from "@/components/CustomButton";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
+import { createUser } from "@/lib/appwrite";
 
 const SignUp = () => {
-  const [formData, setFormData] = useState({username: "", email: "", password: ""});
+  const [formData, setFormData] = useState({
+    username: "",
+    email: "",
+    password: "",
+  });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  async function handleSubmit() {}
+  const handleSubmit = async () => {
+    if (
+      formData.username === "" ||
+      formData.email === "" ||
+      formData.password === ""
+    ) {
+      Alert.alert("Error", "Please fill in all fields");
+      return;
+    }
+
+    if (formData.password.length < 8) {
+      Alert.alert("Error", "Password must be at least 8 characters long");
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const result = await createUser(
+        formData.email,
+        formData.password,
+        formData.username
+      );
+      // setUser(result);
+      // setIsLogged(true);
+      router.replace("/home");
+    } catch (error) {
+      Alert.alert("Error", error.message);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaView className="bg-primary h-full">
         <ScrollView contentContainerStyle={{ height: "100%" }}>
           <View
-            className="h-full w-full justify-center px-4"
+            className="h-full w-full justify-start px-4 mt-12"
             style={{
               minHeight: Dimensions.get("window").height - 100,
             }}
@@ -38,7 +73,9 @@ const SignUp = () => {
             <FormField
               title="Username"
               value={formData.username}
-              handleChangeText={(e) => setFormData({ ...formData, username: e })}
+              handleChangeText={(e) =>
+                setFormData({ ...formData, username: e })
+              }
               otherStyles="mt-10"
             />
             <FormField
