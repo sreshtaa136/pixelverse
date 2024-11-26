@@ -6,9 +6,14 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import CustomButton from "../components/CustomButton";
 import { StatusBar } from "expo-status-bar";
 import { Redirect, router } from "expo-router";
-import 'react-native-url-polyfill/auto';
+import "react-native-url-polyfill/auto";
+import { useGlobalContext } from "@/context/GlobalProvider";
 
 export default function App() {
+  const { loading, isLogged } = useGlobalContext();
+
+  if (!loading && isLogged) return <Redirect href="/home" />;
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaView className="bg-primary h-full">

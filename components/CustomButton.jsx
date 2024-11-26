@@ -9,7 +9,6 @@ const CustomButton = ({
   textStyles,
   isLoading,
 }) => {
-  console.log("CustomButton rendered, handlePress:", handlePress);
   return (
     <TouchableOpacity
       // onPress={console.log("Button pressed!")}

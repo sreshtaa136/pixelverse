@@ -1,4 +1,4 @@
-import { View, Text, Image, Dimensions } from "react-native";
+import { View, Text, Image, Dimensions, Alert } from "react-native";
 import React, { useState } from "react";
 import {
   GestureHandlerRootView,
@@ -9,12 +9,41 @@ import { StatusBar } from "expo-status-bar";
 import { images } from "../../constants";
 import FormField from "@/components/FormField";
 import CustomButton from "@/components/CustomButton";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
+import { signIn } from "@/lib/appwrite";
+import { useGlobalContext } from "@/context/GlobalProvider";
 
 const SignIn = () => {
-  const [formData, setFormData] = useState({email: "", password: ""});
+  const { setUser, setIsLogged } = useGlobalContext();
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  async function handleSubmit() {}
+
+  const handleSubmit = async () => {
+    if (
+      formData.email === "" ||
+      formData.password === ""
+    ) {
+      Alert.alert("Error", "Please fill in all fields");
+      return;
+    }
+    setIsSubmitting(true);
+    try {
+      const result = await signIn(
+        formData.email,
+        formData.password,
+      );
+      setUser(result);
+      setIsLogged(true);
+      Alert.alert("Success", "User signed in successfully");
+      // setUser(result);
+      // setIsLogged(true);
+      router.replace("/home");
+    } catch (error) {
+      Alert.alert("Error", error.message);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
