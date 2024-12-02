@@ -12,9 +12,7 @@ import { useGlobalContext } from "@/context/GlobalProvider";
 export default function App() {
   const { loading, isLogged } = useGlobalContext();
 
-  // if (!loading && isLogged) return <Redirect href="/home" />;
-  // UNTIL APPWRITE WORKS AGAIN 
-  if (!loading && !isLogged) return <Redirect href="/home" />;
+  if (!loading && isLogged) return <Redirect href="/home" />;
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>

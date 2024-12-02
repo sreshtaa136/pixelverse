@@ -18,22 +18,23 @@ import SearchInput from "@/components/SearchInput";
 import Trending from "@/components/Trending";
 import EmptyState from "@/components/EmptyState";
 import { useEffect, useState } from "react";
-import { getAllPosts } from "@/lib/appwrite";
+import { getAllPosts, getLatestPosts } from "@/lib/appwrite";
 import useAppwrite from "@/lib/useAppwrite";
+import VideoCard from "@/components/VideoCard";
 
 const Home = () => {
   const [refreshing, setRefreshing] = useState(false);
   // higher order function (custom)
-  const { data: posts, isLoading, refetch } = useAppwrite(getAllPosts);
+  const { data: posts, refetch: refetchPosts } = useAppwrite(getAllPosts);
 
   const onRefresh = async () => {
     setRefreshing(true);
     // reload data
-    await refetch();
+    await refetchPosts();
     setRefreshing(false);
   };
 
-  console.log("posts", posts);
+  // console.log("posts", posts);
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
@@ -45,10 +46,10 @@ const Home = () => {
         */}
         <FlatList
           // data={[]}
-          data={posts}
+          data={posts ?? []}
           keyExtractor={(item) => item.$id}
           renderItem={({ item }) => (
-            <Text className="text-white text-2xl">{item.title}</Text>
+            <VideoCard video={item} />
           )}
           ListHeaderComponent={FlatListHeader}
           // what to render when list is empty
@@ -69,6 +70,8 @@ const Home = () => {
 };
 
 const FlatListHeader = () => {
+  const { data: latestPosts } = useAppwrite(getLatestPosts);
+
   return (
     <View className="my-6 px-4 space-y-6">
       <View className="justify-between items-center flex-row mb-6">
@@ -91,7 +94,7 @@ const FlatListHeader = () => {
         <Text className="text-lg font-pregular text-gray-100 mb-3">
           Trending Videos
         </Text>
-        <Trending posts={[{ $id: 1 }, { $id: 2 }, { $id: 3 }] ?? []} />
+        <Trending posts={latestPosts ?? []} />
         {/* <Trending posts={latestPosts ?? []} /> */}
       </View>
     </View>
