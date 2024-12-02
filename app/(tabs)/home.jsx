@@ -1,4 +1,12 @@
-import { Image, StyleSheet, Platform, View, Text, RefreshControl } from "react-native";
+import {
+  Image,
+  StyleSheet,
+  Platform,
+  View,
+  Text,
+  RefreshControl,
+  Alert,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { FlatList, ScrollView } from "react-native-gesture-handler";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -9,16 +17,23 @@ import { images } from "@/constants";
 import SearchInput from "@/components/SearchInput";
 import Trending from "@/components/Trending";
 import EmptyState from "@/components/EmptyState";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getAllPosts } from "@/lib/appwrite";
+import useAppwrite from "@/lib/useAppwrite";
 
 const Home = () => {
   const [refreshing, setRefreshing] = useState(false);
+  // higher order function (custom)
+  const { data: posts, isLoading, refetch } = useAppwrite(getAllPosts);
 
-  const onRefresh = () => {
+  const onRefresh = async () => {
     setRefreshing(true);
     // reload data
+    await refetch();
     setRefreshing(false);
-  }
+  };
+
+  console.log("posts", posts);
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
@@ -30,10 +45,10 @@ const Home = () => {
         */}
         <FlatList
           // data={[]}
-          data={[{ $id: 1 }, { $id: 2 }, { $id: 3 }]}
+          data={posts}
           keyExtractor={(item) => item.$id}
           renderItem={({ item }) => (
-            <Text className="text-white text-2xl">{item.$id}</Text>
+            <Text className="text-white text-2xl">{item.title}</Text>
           )}
           ListHeaderComponent={FlatListHeader}
           // what to render when list is empty
