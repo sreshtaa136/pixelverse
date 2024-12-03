@@ -48,9 +48,7 @@ const Home = () => {
           // data={[]}
           data={posts ?? []}
           keyExtractor={(item) => item.$id}
-          renderItem={({ item }) => (
-            <VideoCard video={item} />
-          )}
+          renderItem={({ item }) => <VideoCard video={item} />}
           ListHeaderComponent={FlatListHeader}
           // what to render when list is empty
           ListEmptyComponent={() => (
@@ -71,7 +69,7 @@ const Home = () => {
 
 const FlatListHeader = () => {
   const { data: latestPosts } = useAppwrite(getLatestPosts);
-
+  // console.log("first", latestPosts);
   return (
     <View className="my-6 px-4 space-y-6">
       <View className="justify-between items-center flex-row mb-6">
@@ -94,7 +92,9 @@ const FlatListHeader = () => {
         <Text className="text-lg font-pregular text-gray-100 mb-3">
           Trending Videos
         </Text>
-        <Trending posts={latestPosts ?? []} />
+        {latestPosts && latestPosts.length > 0 && (
+          <Trending posts={latestPosts} />
+        )}
         {/* <Trending posts={latestPosts ?? []} /> */}
       </View>
     </View>
