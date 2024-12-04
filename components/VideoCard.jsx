@@ -1,6 +1,8 @@
 import { View, Text, Image, TouchableOpacity } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import icons from "@/constants/icons";
+import { useVideoPlayer, Video, VideoView } from "expo-video";
+import { useEvent } from "expo";
 
 const VideoCard = ({
   video: {
@@ -12,6 +14,14 @@ const VideoCard = ({
   },
 }) => {
   const [play, setPlay] = useState(false);
+
+  const player = useVideoPlayer(video, (player) => {
+    player.loop = false;
+  });
+
+  const { isPlaying } = useEvent(player, "playingChange", {
+    isPlaying: player.playing,
+  });
 
   return (
     <View className="flex flex-col items-center px-4 mb-14">
@@ -53,32 +63,40 @@ const VideoCard = ({
         </View>
       </View>
       {/* video */}
-      {play ? (
-        <View>
-          <Image
-            source={{ uri: thumbnail }}
-            className="w-9 h-10"
-            resizeMode="contain"
-          />
-        </View>
-      ) : (
-        <TouchableOpacity
-          activeOpacity={0.7}
-          onPress={() => setPlay(true)}
-          className="w-full h-60 rounded-xl mt-6 relative flex justify-center items-center"
-        >
-          <Image
-            source={{ uri: thumbnail }}
-            className="w-full h-full"
-            resizeMode="contain"
-          />
-          <Image
-            source={icons.play}
-            className="w-12 h-12 absolute"
-            resizeMode="contain"
-          />
-        </TouchableOpacity>
-      )}
+      <View className="flex justify-center items-center w-full h-60 rounded-xl mt-6 overflow-hidden relative">
+        <VideoView
+          style={{
+            width: "100%",
+            height: "100%",
+          }}
+          contentFit="cover"
+          player={player}
+          allowsFullscreen={true}
+          allowsPictureInPicture={false}
+          nativeControls={true}
+        />
+        {!isPlaying && (
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={() => {
+              // checking if the video has reached its end 
+              if (player.currentTime === player.duration) {
+                // console.log("ended");
+                // resets the playback position to the beginning
+                player.replay();
+              }
+              player.play();
+            }}
+            className="flex justify-center items-center absolute"
+          >
+            <Image
+              source={icons.play}
+              className="w-12 h-12"
+              resizeMode="contain"
+            />
+          </TouchableOpacity>
+        )}
+      </View>
     </View>
   );
 };
