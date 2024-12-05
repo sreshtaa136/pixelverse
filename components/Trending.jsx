@@ -5,8 +5,9 @@ import {
   Image,
   ImageBackground,
   Button,
+  ActivityIndicator,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FlatList } from "react-native-gesture-handler";
 import * as Animatable from "react-native-animatable";
 import { icons } from "@/constants";
@@ -80,6 +81,17 @@ const TrendingItem = ({ activeItem, item }) => {
     isPlaying: player.playing,
   });
 
+  const { status } = useEvent(player, "statusChange", {
+    status: player.status,
+  });
+
+  // Dynamically update loading state based on player's status
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    setIsLoading(status === "loading");
+  }, [status]);
+
   return (
     <Animatable.View
       className="mr-5"
@@ -98,27 +110,33 @@ const TrendingItem = ({ activeItem, item }) => {
           allowsPictureInPicture={false}
           nativeControls={true}
         />
-        {!isPlaying && (
-          <TouchableOpacity
-            activeOpacity={0.7}
-            onPress={() => {
-              // checking if the video has reached its end 
-              if (player.currentTime === player.duration) {
-                // console.log("ended");
-                // resets the playback position to the beginning
-                player.replay();
-              }
-              player.play();
-            }}
-            className="flex justify-center items-center absolute"
-          >
-            <Image
-              source={icons.play}
-              className="w-12 h-12"
-              resizeMode="contain"
+        {!isPlaying &&
+          (isLoading ? (
+            <ActivityIndicator
+              className="flex justify-center items-center absolute"
+              size="small"
             />
-          </TouchableOpacity>
-        )}
+          ) : (
+            <TouchableOpacity
+              activeOpacity={0.7}
+              onPress={() => {
+                // checking if the video has reached its end
+                if (player.currentTime === player.duration) {
+                  // console.log("ended");
+                  // resets the playback position to the beginning
+                  player.replay();
+                }
+                player.play();
+              }}
+              className="flex justify-center items-center absolute"
+            >
+              <Image
+                source={icons.play}
+                className="w-12 h-12"
+                resizeMode="contain"
+              />
+            </TouchableOpacity>
+          ))}
       </View>
     </Animatable.View>
   );
