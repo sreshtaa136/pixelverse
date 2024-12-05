@@ -79,6 +79,7 @@ const VideoCard = ({
           <TouchableOpacity
             activeOpacity={0.7}
             onPress={() => {
+              console.log("status", player.status);
               // checking if the video has reached its end 
               if (player.currentTime === player.duration) {
                 // console.log("ended");

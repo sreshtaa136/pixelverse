@@ -1,15 +1,12 @@
 import { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, Image } from "react-native";
 import { icons } from "@/constants";
+import { usePathname } from "expo-router";
 
-const SearchInput = ({
-  value,
-  placeholder,
-  handleChangeText,
-  otherStyles,
-  ...props
-}) => {
+const SearchInput = ({ placeholder }) => {
   const [isFocused, setIsFocused] = useState(false);
+  const pathname = usePathname();
+  const [query, setQuery] = useState("");
 
   return (
     <View
@@ -19,13 +16,12 @@ const SearchInput = ({
     >
       <TextInput
         className={`text-base mt-0.5 text-white flex-1 font-pregular`}
-        value={value}
+        value={query}
         placeholder={placeholder}
-        placeholderTextColor="#7B7B8B"
-        onChangeText={handleChangeText}
+        placeholderTextColor="#CDCDE0"
+        onChangeText={(e) => setQuery(e)}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
-        {...props}
       />
       <TouchableOpacity>
         <Image source={icons.search} className="w-5 h-5" resizeMode="contain" />
