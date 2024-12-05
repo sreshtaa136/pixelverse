@@ -1,12 +1,19 @@
 import { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, Image } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  Image,
+  Alert,
+} from "react-native";
 import { icons } from "@/constants";
-import { usePathname } from "expo-router";
+import { router, usePathname } from "expo-router";
 
-const SearchInput = ({ placeholder }) => {
+const SearchInput = ({ placeholder, initialQuery }) => {
   const [isFocused, setIsFocused] = useState(false);
   const pathname = usePathname();
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState(initialQuery || "");
 
   return (
     <View
@@ -23,7 +30,20 @@ const SearchInput = ({ placeholder }) => {
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
       />
-      <TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => {
+          if (query === "")
+            return Alert.alert(
+              "Missing Search term",
+              "Please input something to search across pixelverse"
+            );
+          if (pathname.startsWith("/search")) {
+            router.setParams({ query });
+          } else {
+            router.push(`/search/${query}`);
+          }
+        }}
+      >
         <Image source={icons.search} className="w-5 h-5" resizeMode="contain" />
       </TouchableOpacity>
     </View>

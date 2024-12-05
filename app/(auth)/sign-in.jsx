@@ -10,7 +10,7 @@ import { images } from "../../constants";
 import FormField from "@/components/FormField";
 import CustomButton from "@/components/CustomButton";
 import { Link, router } from "expo-router";
-import { signIn } from "@/lib/appwrite";
+import { getCurrentUser, signIn } from "@/lib/appwrite";
 import { useGlobalContext } from "@/context/GlobalProvider";
 
 const SignIn = () => {
@@ -19,24 +19,17 @@ const SignIn = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async () => {
-    if (
-      formData.email === "" ||
-      formData.password === ""
-    ) {
+    if (formData.email === "" || formData.password === "") {
       Alert.alert("Error", "Please fill in all fields");
       return;
     }
     setIsSubmitting(true);
     try {
-      const result = await signIn(
-        formData.email,
-        formData.password,
-      );
-      setUser(result);
+      const result = await signIn(formData.email, formData.password);
+      const currUser = await getCurrentUser();
+      setUser(currUser);
       setIsLogged(true);
-      Alert.alert("Success", "User signed in successfully");
-      // setUser(result);
-      // setIsLogged(true);
+      // Alert.alert("Success", "You are signed in!");
       router.replace("/home");
     } catch (error) {
       Alert.alert("Error", error.message);

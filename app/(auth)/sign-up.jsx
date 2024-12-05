@@ -44,7 +44,8 @@ const SignUp = () => {
         formData.password,
         formData.username
       );
-      setUser(result);
+      const currUser = await getCurrentUser();
+      setUser(currUser);
       setIsLogged(true);
       router.replace("/home");
     } catch (error) {

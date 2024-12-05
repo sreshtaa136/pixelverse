@@ -23,6 +23,7 @@ import useAppwrite from "@/lib/useAppwrite";
 import VideoCard from "@/components/VideoCard";
 
 const Home = () => {
+  const { user } = useGlobalContext();
   const [refreshing, setRefreshing] = useState(false);
   // higher order function (custom)
   const { data: posts, refetch: refetchPosts } = useAppwrite(getAllPosts);
@@ -49,7 +50,7 @@ const Home = () => {
           data={posts ?? []}
           keyExtractor={(item) => item.$id}
           renderItem={({ item }) => <VideoCard video={item} />}
-          ListHeaderComponent={FlatListHeader}
+          ListHeaderComponent={() => <FlatListHeader user={user} />}
           // what to render when list is empty
           ListEmptyComponent={() => (
             <EmptyState
@@ -67,7 +68,7 @@ const Home = () => {
   );
 };
 
-const FlatListHeader = () => {
+const FlatListHeader = ({ user }) => {
   const { data: latestPosts } = useAppwrite(getLatestPosts);
   // console.log("first", latestPosts);
   return (
@@ -77,7 +78,9 @@ const FlatListHeader = () => {
           <Text className="font-pmedium text-md text-gray-100">
             Welcome back
           </Text>
-          <Text className="text-white text-2xl font-psemibold">Sreshtaa</Text>
+          <Text className="text-white text-2xl font-psemibold">
+            {user?.username}
+          </Text>
         </View>
         <View>
           <Image

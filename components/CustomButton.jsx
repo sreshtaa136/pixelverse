@@ -14,7 +14,7 @@ const CustomButton = ({
       // onPress={console.log("Button pressed!")}
       onPress={handlePress}
       activeOpacity={0.7} // button opacity once pressed
-      className={`bg-secondary rounded-md min-h-[62px] justify-center items-center ${containerStyles} ${
+      className={`bg-secondary rounded-md min-h-[50px] justify-center items-center ${containerStyles} ${
         isLoading && "opacity-50"
       }`}
       disabled={isLoading}

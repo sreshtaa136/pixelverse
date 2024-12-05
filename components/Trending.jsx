@@ -108,7 +108,7 @@ const TrendingItem = ({ activeItem, item }) => {
           player={player}
           allowsFullscreen={true}
           allowsPictureInPicture={false}
-          nativeControls={true}
+          nativeControls={isLoading ? false : true}
         />
         {!isPlaying &&
           (isLoading ? (

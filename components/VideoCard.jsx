@@ -45,10 +45,10 @@ const VideoCard = ({
       <View className="flex flex-row gap-3 items-start">
         <View className="flex flex-row flex-1 justify-center items-center">
           {/* user avatar */}
-          <View className="w-[46px] h-[46px] rounded-lg border border-secondary flex justify-center items-center p-0.5">
+          <View className="w-[3.8em] h-[3.8em] rounded-[50%] border border-secondary flex justify-center items-center p-0.5">
             <Image
               source={{ uri: avatar }}
-              className="w-full h-full rounded-lg"
+              className="w-full h-full rounded-[50%]"
               resizeMode="cover"
             />
           </View>
@@ -90,7 +90,7 @@ const VideoCard = ({
           player={player}
           allowsFullscreen={true}
           allowsPictureInPicture={false}
-          nativeControls={true}
+          nativeControls={isLoading ? false : true}
         />
         {!isPlaying &&
           (isLoading ? (
