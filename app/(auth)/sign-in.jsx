@@ -61,7 +61,9 @@ const SignIn = () => {
               value={formData.email}
               handleChangeText={(e) => setFormData({ ...formData, email: e })}
               otherStyles="mt-10"
-              keyboardType="email-address"
+              textContentType="username" // Enables autofill for email
+              autoComplete="username" // Enables autofill (RN >= 0.66)
+              placeholder="Enter your email or username"
             />
             <FormField
               title="Password"
@@ -69,6 +71,8 @@ const SignIn = () => {
               handleChangeText={(e) =>
                 setFormData({ ...formData, password: e })
               }
+              textContentType="password" // Enables autofill for password
+              autoComplete="password" // Enables autofill (RN >= 0.66)
               otherStyles="mt-7"
             />
             <CustomButton

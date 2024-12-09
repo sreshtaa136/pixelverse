@@ -87,6 +87,8 @@ const SignUp = () => {
               handleChangeText={(e) => setFormData({ ...formData, email: e })}
               otherStyles="mt-7"
               keyboardType="email-address"
+              textContentType="username" // Enables autofill for email
+              autoComplete="username" // Enables autofill (RN >= 0.66)
             />
             <FormField
               title="Password"
