@@ -61,13 +61,20 @@ const Profile = () => {
 const FlatListHeader = ({ user, numPosts, logout }) => {
   return (
     <View className="w-full flex justify-center items-center mt-6 mb-12 px-4">
-      {/* logout button */}
-      <TouchableOpacity
-        onPress={logout}
-        className="flex w-full items-end mb-10"
-      >
-        <Image source={icons.logout} resizeMode="contain" className="w-6 h-6" />
-      </TouchableOpacity>
+      <View className="flex flex-row w-full justify-between mb-10 ">
+        {/* edit button */}
+        <TouchableOpacity onPress={() => router.push("/profile/edit")}>
+          <Image source={icons.edit} resizeMode="contain" className="w-7 h-7" />
+        </TouchableOpacity>
+        {/* logout button */}
+        <TouchableOpacity onPress={logout}>
+          <Image
+            source={icons.logout}
+            resizeMode="contain"
+            className="w-6 h-6"
+          />
+        </TouchableOpacity>
+      </View>
       {/* user avatar */}
       <View className="w-[8em] h-[8em] border border-secondary rounded-[50%] flex justify-center items-center p-0.5">
         <Image

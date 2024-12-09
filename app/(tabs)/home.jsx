@@ -17,10 +17,11 @@ import { images } from "@/constants";
 import SearchInput from "@/components/SearchInput";
 import Trending from "@/components/Trending";
 import EmptyState from "@/components/EmptyState";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { getAllPosts, getLatestPosts } from "@/lib/appwrite";
 import useAppwrite from "@/lib/useAppwrite";
 import VideoCard from "@/components/VideoCard";
+import { useFocusEffect } from "@react-navigation/native";
 
 const Home = () => {
   const { user } = useGlobalContext();
@@ -34,6 +35,13 @@ const Home = () => {
     await refetchPosts();
     setRefreshing(false);
   };
+
+  // refetch data when the screen is visited
+  useFocusEffect(
+    useCallback(() => {
+      onRefresh(); // Refetch when Home is focused
+    }, [])
+  );
 
   // console.log("posts", posts);
 

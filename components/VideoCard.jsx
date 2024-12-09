@@ -75,9 +75,9 @@ const VideoCard = ({
           </View>
         </View>
         {/* menu */}
-        <View>
+        {/* <View>
           <Image source={icons.menu} className="w-5 h-5" resizeMode="contain" />
-        </View>
+        </View> */}
       </View>
       {/* video */}
       <View className="flex justify-center items-center w-full h-60 rounded-xl mt-6 overflow-hidden relative">
