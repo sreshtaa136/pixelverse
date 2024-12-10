@@ -26,7 +26,7 @@ import { router } from "expo-router";
 import { createVideoPost } from "@/lib/appwrite";
 
 const Create = () => {
-  const { user } = useGlobalContext();
+  const { user, refetchPosts, refetchUserPosts } = useGlobalContext();
   const [uploading, setUploading] = useState(false);
   // Dynamically update loading state based on player's status
   const [isFileLoading, setIsFileLoading] = useState(false);
@@ -117,6 +117,8 @@ const Create = () => {
         userId: user.$id,
       });
       Alert.alert("Success", "Post uploaded successfully");
+      refetchPosts();
+      refetchUserPosts();
       router.push("/home");
     } catch (error) {
       Alert.alert("Error", error.message);

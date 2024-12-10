@@ -24,10 +24,10 @@ import VideoCard from "@/components/VideoCard";
 import { useFocusEffect } from "@react-navigation/native";
 
 const Home = () => {
-  const { user } = useGlobalContext();
+  const { user, posts, refetchPosts } = useGlobalContext();
   const [refreshing, setRefreshing] = useState(false);
   // higher order function (custom)
-  const { data: posts, refetch: refetchPosts } = useAppwrite(getAllPosts);
+  // const { data: posts, refetch: refetchPosts } = useAppwrite(getAllPosts);
 
   const onRefresh = async () => {
     setRefreshing(true);

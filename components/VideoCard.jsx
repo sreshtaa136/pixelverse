@@ -55,7 +55,7 @@ const VideoCard = ({
           {/* title and subtitle col */}
           <View className="flex justify-center flex-1 ml-3 gap-y-1">
             <Text
-              className="font-psemibold text-sm text-white"
+              className="font-psemibold text-md text-white"
               /* 
                 Used to truncate the text with an ellipsis after
                 computing the text layout, including line wrapping,

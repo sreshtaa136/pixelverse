@@ -18,8 +18,8 @@ import InfoBox from "@/components/InfoBox";
 import { router } from "expo-router";
 
 const Profile = () => {
-  const { user, setUser, setIsLogged } = useGlobalContext();
-  const { data: posts } = useAppwrite(() => getUserPosts(user?.$id));
+  const { user, setUser, setIsLogged, userPosts } = useGlobalContext();
+  // const { data: userPosts } = useAppwrite(() => getUserPosts(user?.$id));
 
   async function logout() {
     await signOut();
@@ -34,13 +34,13 @@ const Profile = () => {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaView className="bg-primary h-full">
         <FlatList
-          data={posts ?? []}
+          data={userPosts ?? []}
           keyExtractor={(item) => item.$id}
           renderItem={({ item }) => <VideoCard video={item} />}
           ListHeaderComponent={() => (
             <FlatListHeader
               user={user}
-              numPosts={posts.length}
+              numPosts={userPosts.length}
               logout={logout}
             />
           )}

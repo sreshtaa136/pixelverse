@@ -1,5 +1,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import { getCurrentUser } from "../lib/appwrite";
+import { getCurrentUser, getUserPosts } from "../lib/appwrite";
+import useAppwrite from "@/lib/useAppwrite";
+import { getAllPosts } from "@/lib/appwrite";
 
 const GlobalContext = createContext();
 export const useGlobalContext = () => useContext(GlobalContext);
@@ -8,6 +10,8 @@ const GlobalProvider = ({ children }) => {
   const [isLogged, setIsLogged] = useState(false);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { data: posts, refetch: refetchPosts } = useAppwrite(getAllPosts);
+  const { data: userPosts, refetch: refetchUserPosts } = useAppwrite(() => getUserPosts(user?.$id));
 
   async function refreshUserData() {
     setLoading(true);
@@ -42,6 +46,10 @@ const GlobalProvider = ({ children }) => {
         setUser,
         loading,
         refreshUserData,
+        posts,
+        refetchPosts,
+        userPosts,
+        refetchUserPosts,
       }}
     >
       {children}
