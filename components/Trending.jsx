@@ -98,7 +98,7 @@ const TrendingItem = ({ activeItem, item }) => {
       animation={activeItem === item.$id ? zoomIn : zoomOut}
       duration={500}
     >
-      <View className="flex justify-center items-center mr-5 w-52 h-72 rounded-[33px] mt-3 overflow-hidden relative">
+      <View className="flex justify-center items-center w-52 h-72 rounded-[33px] mt-3 overflow-hidden relative">
         <VideoView
           style={{
             width: "100%",

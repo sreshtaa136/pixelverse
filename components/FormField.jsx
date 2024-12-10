@@ -9,6 +9,8 @@ const FormField = ({
   placeholder,
   handleChangeText,
   otherStyles,
+  editable = true,
+  inputStyles,
   ...props
 }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -24,12 +26,13 @@ const FormField = ({
         } flex flex-row items-center`}
       >
         <TextInput
-          className={`flex-1 text-white font-psemibold text-base`}
+          className={`flex-1 text-white font-psemibold text-base ${inputStyles}`}
           value={value}
           placeholder={placeholder}
           placeholderTextColor="#7B7B8B"
           onChangeText={handleChangeText}
           secureTextEntry={title === "Password" && !showPassword}
+          editable={editable}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
           {...props}

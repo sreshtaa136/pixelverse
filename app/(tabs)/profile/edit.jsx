@@ -23,40 +23,33 @@ import CustomButton from "@/components/CustomButton";
 import * as DocumentPicker from "expo-document-picker";
 import * as ImagePicker from "expo-image-picker";
 import { router } from "expo-router";
-import { createVideoPost } from "@/lib/appwrite";
+import { updateUserProfile } from "@/lib/appwrite";
 import { getCurrentUser } from "@/lib/appwrite";
 import useAppwrite from "@/lib/useAppwrite";
 
 const EditProfile = () => {
-  const {
-    data: user,
-    refetch: refetchUser,
-    isLoading: isUserLoading,
-  } = useAppwrite(getCurrentUser);
+  const { user, refreshUserData } = useGlobalContext();
+  // const {
+  //   data: user,
+  //   refetch: refetchUser,
+  //   isLoading: isUserLoading,
+  // } = useAppwrite(getCurrentUser);
   const [uploading, setUploading] = useState(false);
   // Dynamically update loading state based on player's status
   const [isFileLoading, setIsFileLoading] = useState(false);
   const [form, setForm] = useState({
-    title: "",
-    video: null,
-    thumbnail: null,
-    prompt: "",
     username: "",
     avatar: null,
     email: "",
   });
 
-  const player = useVideoPlayer(form.video?.uri, (player) => {
-    player.loop = false;
-  });
-
   // Function to open a document picker for selecting images or videos
-  const openPicker = async (selectType) => {
+  const openPicker = async () => {
     // Use the ImagePicker to let the user select from gallery
     // No permissions request is necessary for launching the image library
     setIsFileLoading(true);
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: selectType === "image" ? ["images"] : ["videos"],
+      mediaTypes: ["images"],
       allowsEditing: false,
       aspect: [4, 3],
       quality: 1,
@@ -74,26 +67,13 @@ const EditProfile = () => {
           "File Too Large",
           "Please select a file smaller than 50MB."
         );
-        return; // Stop further processing
+        return;
       }
-
-      // If the user selected an image
-      if (selectType === "image") {
-        // Update the `form` state with the selected image file
-        setForm({
-          ...form,
-          thumbnail: file, // Add the selected file as the `thumbnail`
-        });
-      }
-
-      // If the user selected a video
-      if (selectType === "video") {
-        // Update the `form` state with the selected video file
-        setForm({
-          ...form,
-          video: file, // Add the selected file as the `video`
-        });
-      }
+      // Update the `form` state with the selected image file
+      setForm({
+        ...form,
+        avatar: file,
+      });
     } else {
       // If the user cancels the file picker
       if (result.assets[0]) {
@@ -105,25 +85,25 @@ const EditProfile = () => {
   };
 
   const submit = async () => {
-    if (form.prompt === "" || form.title === "" || !form.video) {
-      return Alert.alert("Please provide all fields");
+    if (form.username === "") {
+      return Alert.alert("Please enter a username");
     }
     setUploading(true);
     try {
-      await createVideoPost({
+      await updateUserProfile({
         ...form,
         userId: user.$id,
       });
-      Alert.alert("Success", "Post uploaded successfully");
-      router.push("/home");
+      Alert.alert("Success", "Profile updated successfully");
+      refreshUserData();
+      router.push("/profile");
     } catch (error) {
       Alert.alert("Error", error.message);
     } finally {
       setForm({
-        title: "",
-        video: null,
-        thumbnail: null,
-        prompt: "",
+        username: "",
+        avatar: null,
+        email: "",
       });
       setUploading(false);
     }
@@ -167,7 +147,7 @@ const EditProfile = () => {
               <Text className="text-base text-gray-100 font-pmedium mb-3">
                 Avatar
               </Text>
-              <TouchableOpacity onPress={() => openPicker("image")}>
+              <TouchableOpacity onPress={() => openPicker()}>
                 {form.avatar || user.avatar ? (
                   <View className="flex flex-row justify-start gap-3 items-center">
                     <View className="w-[8em] h-[8em] border border-secondary rounded-[50%] flex justify-center items-center p-0.5 relative">
@@ -176,12 +156,12 @@ const EditProfile = () => {
                         className="w-[100%] h-[100%] rounded-[50%]"
                         resizeMode="cover"
                       />
-                      <View className="absolute">
+                      <View className="flex absolute bg-white/30 w-full h-full rounded-[50%] justify-center items-center">
                         <Image
-                          source={icons.upload}
+                          source={icons.camera}
                           resizeMode="contain"
                           alt="upload"
-                          className="w-8 h-8"
+                          className="w-8 h-8 z-40"
                         />
                       </View>
                     </View>
@@ -193,10 +173,10 @@ const EditProfile = () => {
                   <View className="flex flex-row justify-start gap-3 items-center">
                     <View className="w-[8em] h-[8em] bg-black-100 border-2 border-black-200 rounded-[50%]  p-0.5 flex justify-center items-center">
                       <Image
-                        source={icons.upload}
+                        source={icons.camera}
                         resizeMode="contain"
                         alt="upload"
-                        className="w-8 h-8"
+                        className="w-8 h-8 z-40"
                       />
                     </View>
                     <Text className="text-sm text-gray-100 font-pmedium ml-3">
@@ -219,6 +199,7 @@ const EditProfile = () => {
               value={form.email}
               editable={false}
               otherStyles="mt-7"
+              inputStyles="text-gray-500"
             />
             {/* submit */}
             <CustomButton

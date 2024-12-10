@@ -13,6 +13,8 @@ import eye from "../assets/icons/eye.png";
 import play from "../assets/icons/play.png";
 import edit from "../assets/icons/edit.png";
 import arrowBack from "../assets/icons/arrow-back.png";
+import camera from "../assets/icons/camera.png";
+import uploadSecondary from "../assets/icons/upload-secondary.png";
 
 export default {
   play,
@@ -30,4 +32,6 @@ export default {
   eye,
   edit,
   arrowBack,
+  uploadSecondary,
+  camera,
 };

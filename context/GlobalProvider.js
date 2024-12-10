@@ -9,7 +9,8 @@ const GlobalProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  async function refreshUserData() {
+    setLoading(true);
     getCurrentUser()
       .then((res) => {
         if (res) {
@@ -26,6 +27,10 @@ const GlobalProvider = ({ children }) => {
       .finally(() => {
         setLoading(false);
       });
+  }
+
+  useEffect(() => {
+    refreshUserData();
   }, []);
 
   return (
@@ -36,6 +41,7 @@ const GlobalProvider = ({ children }) => {
         user,
         setUser,
         loading,
+        refreshUserData,
       }}
     >
       {children}
