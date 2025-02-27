@@ -12,6 +12,7 @@ import CustomButton from "@/components/CustomButton";
 import { Link, router } from "expo-router";
 import { createUser, getCurrentUser } from "@/lib/appwrite";
 import { useGlobalContext } from "@/context/GlobalProvider";
+import { signUp } from "@/lib/authFunctions";
 
 const SignUp = () => {
   const { setUser, setIsLogged } = useGlobalContext();
@@ -39,13 +40,21 @@ const SignUp = () => {
 
     setIsSubmitting(true);
     try {
-      const result = await createUser(
+      const user = await signUp(
         formData.email,
         formData.password,
         formData.username
       );
-      const currUser = await getCurrentUser();
-      setUser(currUser);
+      // const result = await createUser(
+      //   formData.email,
+      //   formData.password,
+      //   formData.username
+      // );
+      // const currUser = await getCurrentUser();
+      if (!user) {
+        throw new Error("User registration failed.");
+      }
+      setUser(user);
       setIsLogged(true);
       router.replace("/home");
     } catch (error) {
@@ -117,7 +126,7 @@ const SignUp = () => {
             </View>
           </View>
         </ScrollView>
-        <StatusBar backgroundColor="#161622" style="light" />
+        {/* <StatusBar backgroundColor="#161622" style="light" /> */}
       </SafeAreaView>
     </GestureHandlerRootView>
   );

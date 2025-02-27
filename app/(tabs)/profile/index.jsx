@@ -16,13 +16,15 @@ import { useGlobalContext } from "@/context/GlobalProvider";
 import { icons } from "@/constants";
 import InfoBox from "@/components/InfoBox";
 import { router } from "expo-router";
+import { logOut } from "@/lib/authFunctions";
 
 const Profile = () => {
   const { user, setUser, setIsLogged } = useGlobalContext();
   const { data: posts } = useAppwrite(() => getUserPosts(user?.$id));
 
   async function logout() {
-    await signOut();
+    // await signOut();
+    logOut();
     setUser(null);
     setIsLogged(false);
     // replacing url makes sure that the

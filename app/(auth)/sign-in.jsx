@@ -10,8 +10,8 @@ import { images } from "../../constants";
 import FormField from "@/components/FormField";
 import CustomButton from "@/components/CustomButton";
 import { Link, router } from "expo-router";
-import { getCurrentUser, signIn } from "@/lib/appwrite";
 import { useGlobalContext } from "@/context/GlobalProvider";
+import { signIn } from "@/lib/authFunctions";
 
 const SignIn = () => {
   const { setUser, setIsLogged } = useGlobalContext();
@@ -25,9 +25,14 @@ const SignIn = () => {
     }
     setIsSubmitting(true);
     try {
-      const result = await signIn(formData.email, formData.password);
-      const currUser = await getCurrentUser();
-      setUser(currUser);
+      // const result = await signIn(formData.email, formData.password);
+      // const currUser = await getCurrentUser();
+      // setUser(currUser);
+      const user = await signIn(formData.email, formData.password);
+      if (!user) {
+        throw new Error("Unable to sign-in.");
+      }
+      setUser(user);
       setIsLogged(true);
       // Alert.alert("Success", "You are signed in!");
       router.replace("/home");
@@ -74,6 +79,7 @@ const SignIn = () => {
               textContentType="password" // Enables autofill for password
               autoComplete="password" // Enables autofill (RN >= 0.66)
               otherStyles="mt-7"
+              placeholder="Enter your password"
             />
             <CustomButton
               title={"Sign In"}
@@ -94,7 +100,7 @@ const SignIn = () => {
             </View>
           </View>
         </ScrollView>
-        <StatusBar backgroundColor="#161622" style="light" />
+        {/* <StatusBar backgroundColor="#161622" style="light" /> */}
       </SafeAreaView>
     </GestureHandlerRootView>
   );
