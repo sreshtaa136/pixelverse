@@ -23,19 +23,16 @@ import CustomButton from "@/components/CustomButton";
 import * as DocumentPicker from "expo-document-picker";
 import * as ImagePicker from "expo-image-picker";
 import { router } from "expo-router";
-import { createVideoPost } from "@/lib/appwrite";
+import { createVideoPost } from "@/lib/storageFunctions";
 
 const Create = () => {
-  const { user } = useGlobalContext();
+  const { user, loading: userLoading } = useGlobalContext();
   const [uploading, setUploading] = useState(false);
   // Dynamically update loading state based on player's status
   const [isFileLoading, setIsFileLoading] = useState(false);
   const [form, setForm] = useState({
     title: "",
-    video:
-      // "https://videos.pexels.com/video-files/5377700/5377700-uhd_1440_2560_25fps.mp4",
-      null,
-    // thumbnail: null,
+    video: null,
     prompt: "",
   });
 
@@ -45,15 +42,6 @@ const Create = () => {
 
   // Function to open a document picker for selecting images or videos
   const openPicker = async (selectType) => {
-    // Use the DocumentPicker to let the user select from files
-    // const result = await DocumentPicker.getDocumentAsync({
-    //   // Restrict the allowed file types based on the input parameter `selectType`
-    //   type:
-    //     selectType === "image"
-    //       ? ["image/png", "image/jpg", "image/jpeg"] // Allow only PNG and JPG images
-    //       : ["video/mp4", "video/gif"], // Allow only MP4 and GIF videos
-    // });
-
     // Use the ImagePicker to let the user select from gallery
     // No permissions request is necessary for launching the image library
     setIsFileLoading(true);
@@ -64,6 +52,7 @@ const Create = () => {
       quality: 1,
     });
     setIsFileLoading(false);
+
     // Check if the user successfully selected a file
     if (!result.canceled && result.assets?.[0]) {
       const file = result.assets[0];
@@ -114,7 +103,7 @@ const Create = () => {
     try {
       await createVideoPost({
         ...form,
-        userId: user.$id,
+        userId: user.uid,
       });
       Alert.alert("Success", "Post uploaded successfully");
       router.push("/home");

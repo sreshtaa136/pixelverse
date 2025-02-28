@@ -46,6 +46,10 @@ const GlobalProvider = ({ children }) => {
     refreshUserData();
   }, [userDetails, loading]);
 
+  useEffect(() => {
+    refreshUserData();
+  }, []);
+
   return (
     <GlobalContext.Provider
       value={{
