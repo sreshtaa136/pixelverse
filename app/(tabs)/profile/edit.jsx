@@ -25,7 +25,7 @@ import * as ImagePicker from "expo-image-picker";
 import { router } from "expo-router";
 import { updateUserProfile } from "@/lib/appwrite";
 import { getCurrentUser } from "@/lib/appwrite";
-import useAppwrite from "@/lib/useAppwrite";
+import useFunction from "@/lib/useFunction";
 
 const EditProfile = () => {
   const { user, refreshUserData } = useGlobalContext();
@@ -33,7 +33,7 @@ const EditProfile = () => {
   //   data: user,
   //   refetch: refetchUser,
   //   isLoading: isUserLoading,
-  // } = useAppwrite(getCurrentUser);
+  // } = useFunction(getCurrentUser);
   const [uploading, setUploading] = useState(false);
   // Dynamically update loading state based on player's status
   const [isFileLoading, setIsFileLoading] = useState(false);

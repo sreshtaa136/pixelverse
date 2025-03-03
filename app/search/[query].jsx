@@ -7,13 +7,13 @@ import SearchInput from "@/components/SearchInput";
 import EmptyState from "@/components/EmptyState";
 import { useEffect, useState } from "react";
 import { searchPosts } from "@/lib/appwrite";
-import useAppwrite from "@/lib/useAppwrite";
+import useFunction from "@/lib/useFunction";
 import VideoCard from "@/components/VideoCard";
 
 const Search = () => {
   const { query } = useLocalSearchParams();
   // higher order function (custom)
-  const { data: posts, refetch } = useAppwrite(() => searchPosts(query));
+  const { data: posts, refetch } = useFunction(() => searchPosts(query));
 
   useEffect(() => {
     refetch();

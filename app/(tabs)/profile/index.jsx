@@ -4,23 +4,18 @@ import { FlatList } from "react-native-gesture-handler";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import EmptyState from "@/components/EmptyState";
 import { useEffect, useState } from "react";
-import {
-  getAllPosts,
-  getUserPosts,
-  searchPosts,
-  signOut,
-} from "@/lib/appwrite";
-import useAppwrite from "@/lib/useAppwrite";
+import useFunction from "@/lib/useFunction";
 import VideoCard from "@/components/VideoCard";
 import { useGlobalContext } from "@/context/GlobalProvider";
-import { icons } from "@/constants";
+import icons from "@/constants/icons";
 import InfoBox from "@/components/InfoBox";
 import { router } from "expo-router";
 import { logOut } from "@/lib/authFunctions";
+import { getUserPosts } from "@/lib/storageFunctions";
 
 const Profile = () => {
   const { user, setUser, setIsLogged } = useGlobalContext();
-  const { data: posts } = useAppwrite(() => getUserPosts(user?.$id));
+  const { data: posts } = useFunction(() => getUserPosts(user?.uid));
 
   async function logout() {
     // await signOut();
@@ -37,7 +32,7 @@ const Profile = () => {
       <SafeAreaView className="bg-primary h-full">
         <FlatList
           data={posts ?? []}
-          keyExtractor={(item) => item.$id}
+          keyExtractor={(item) => item.id}
           renderItem={({ item }) => <VideoCard video={item} />}
           ListHeaderComponent={() => (
             <FlatListHeader
@@ -54,7 +49,6 @@ const Profile = () => {
             />
           )}
         />
-        {/* <StatusBar backgroundColor="#161622" style="light" /> */}
       </SafeAreaView>
     </GestureHandlerRootView>
   );
@@ -79,11 +73,19 @@ const FlatListHeader = ({ user, numPosts, logout }) => {
       </View>
       {/* user avatar */}
       <View className="w-[8em] h-[8em] border border-secondary rounded-[50%] flex justify-center items-center p-0.5">
-        <Image
-          source={{ uri: user?.avatar }}
-          className="w-[100%] h-[100%] rounded-[50%]"
-          resizeMode="cover"
-        />
+        {user?.avatar ? (
+          <Image
+            source={{ uri: user?.avatar }}
+            className="w-[100%] h-[100%] rounded-[50%]"
+            resizeMode="cover"
+          />
+        ) : (
+          <View className="w-[100%] h-[100%] rounded-[50%] bg-gray-500 items-center justify-center">
+            <Image
+              source={icons.profile}
+            />
+          </View>
+        )}
       </View>
       {/* username */}
       <InfoBox

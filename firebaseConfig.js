@@ -1,5 +1,9 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
-import { initializeAuth, getReactNativePersistence, getAuth } from "firebase/auth";
+import {
+  initializeAuth,
+  getReactNativePersistence,
+  getAuth,
+} from "firebase/auth";
 // An asynchronous, unencrypted, persistent, key-value storage system for React Native.
 import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
 import { getFirestore } from "firebase/firestore";
@@ -16,8 +20,7 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app =
-  getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
 const auth = initializeAuth(app, {
   persistence: getReactNativePersistence(ReactNativeAsyncStorage),
 });

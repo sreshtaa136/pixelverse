@@ -19,7 +19,7 @@ import Trending from "@/components/Trending";
 import EmptyState from "@/components/EmptyState";
 import { useCallback, useEffect, useState } from "react";
 import { getAllPosts, getLatestPosts } from "@/lib/appwrite";
-import useAppwrite from "@/lib/useAppwrite";
+import useFunction from "@/lib/useFunction";
 import VideoCard from "@/components/VideoCard";
 import { useFocusEffect } from "@react-navigation/native";
 
@@ -27,7 +27,7 @@ const Home = () => {
   const { user } = useGlobalContext();
   const [refreshing, setRefreshing] = useState(false);
   // higher order function (custom)
-  const { data: posts, refetch: refetchPosts } = useAppwrite(getAllPosts);
+  const { data: posts, refetch: refetchPosts } = useFunction(getAllPosts);
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -70,14 +70,13 @@ const Home = () => {
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }
         />
-        {/* <StatusBar backgroundColor="#161622" style="light" /> */}
       </SafeAreaView>
     </GestureHandlerRootView>
   );
 };
 
 const FlatListHeader = ({ user }) => {
-  const { data: latestPosts } = useAppwrite(getLatestPosts);
+  const { data: latestPosts } = useFunction(getLatestPosts);
   // console.log("first", latestPosts);
   return (
     <View className="my-6 px-4 space-y-6">
