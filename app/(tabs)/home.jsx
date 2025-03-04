@@ -18,10 +18,10 @@ import SearchInput from "@/components/SearchInput";
 import Trending from "@/components/Trending";
 import EmptyState from "@/components/EmptyState";
 import { useCallback, useEffect, useState } from "react";
-import { getAllPosts, getLatestPosts } from "@/lib/appwrite";
 import useFunction from "@/lib/useFunction";
 import VideoCard from "@/components/VideoCard";
 import { useFocusEffect } from "@react-navigation/native";
+import { getAllPosts, getLatestPosts } from "@/lib/storageFunctions";
 
 const Home = () => {
   const { user } = useGlobalContext();
@@ -56,7 +56,7 @@ const Home = () => {
         <FlatList
           // data={[]}
           data={posts ?? []}
-          keyExtractor={(item) => item.$id}
+          keyExtractor={(item) => item.id}
           renderItem={({ item }) => <VideoCard video={item} />}
           ListHeaderComponent={() => <FlatListHeader user={user} />}
           // what to render when list is empty

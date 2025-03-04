@@ -9,6 +9,7 @@ import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 import Constants from "expo-constants";
+import { algoliasearch } from 'algoliasearch';
 
 const firebaseConfig = {
   apiKey: Constants.expoConfig.extra.API_KEY,
@@ -36,4 +37,9 @@ const auth = initializeAuth(app, {
 const db = getFirestore(app);
 const storage = getStorage(app);
 
-export { app, auth, db, storage };
+// Initialize Algolia
+const ALGOLIA_APP_ID = Constants.expoConfig.extra.ALGOLIA_APP_ID;
+const ALGOLIA_ADMIN_KEY = Constants.expoConfig.extra.ALGOLIA_ADMIN_KEY;
+const algoliaClient = algoliasearch(ALGOLIA_APP_ID, ALGOLIA_ADMIN_KEY);
+
+export { app, auth, db, storage, algoliaClient };

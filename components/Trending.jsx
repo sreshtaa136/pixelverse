@@ -1,10 +1,7 @@
 import {
   View,
-  Text,
   TouchableOpacity,
   Image,
-  ImageBackground,
-  Button,
   ActivityIndicator,
 } from "react-native";
 import React, { useEffect, useState } from "react";
@@ -12,7 +9,6 @@ import { FlatList } from "react-native-gesture-handler";
 import * as Animatable from "react-native-animatable";
 import { icons } from "@/constants";
 import { useVideoPlayer, Video, VideoView } from "expo-video";
-import { ResizeMode } from "expo-av";
 import { useEvent } from "expo";
 
 const Trending = ({ posts }) => {
@@ -29,7 +25,7 @@ const Trending = ({ posts }) => {
   return (
     <FlatList
       data={posts}
-      keyExtractor={(item) => item.$id}
+      keyExtractor={(item) => item.id}
       horizontal
       renderItem={({ item }) => (
         <TrendingItem activeItem={activeItem} item={item} />
@@ -40,7 +36,7 @@ const Trending = ({ posts }) => {
         // 70% of it is on the screen.
         itemVisiblePercentThreshold: 70,
       }}
-      contentOffset={{ x: 100 }} // initial horizontal scroll offset
+      contentOffset={{ x: posts.length > 1 ? 100 : 0 }} // initial horizontal scroll offset
       showsHorizontalScrollIndicator={false} // Hides the scrollbar
     />
   );
@@ -95,7 +91,7 @@ const TrendingItem = ({ activeItem, item }) => {
   return (
     <Animatable.View
       className="mr-2"
-      animation={activeItem === item.$id ? zoomIn : zoomOut}
+      animation={activeItem === item.id ? zoomIn : zoomOut}
       duration={500}
     >
       <View className="flex justify-center items-center w-52 h-72 rounded-[33px] mt-3 overflow-hidden relative">

@@ -33,7 +33,14 @@ const Profile = () => {
         <FlatList
           data={posts ?? []}
           keyExtractor={(item) => item.id}
-          renderItem={({ item }) => <VideoCard video={item} />}
+          renderItem={({ item }) => (
+            <VideoCard
+              video={{
+                ...item,
+                creator: { username: user?.username, avatar: user?.avatar },
+              }}
+            />
+          )}
           ListHeaderComponent={() => (
             <FlatListHeader
               user={user}
@@ -81,9 +88,7 @@ const FlatListHeader = ({ user, numPosts, logout }) => {
           />
         ) : (
           <View className="w-[100%] h-[100%] rounded-[50%] bg-gray-500 items-center justify-center">
-            <Image
-              source={icons.profile}
-            />
+            <Image source={icons.profile} />
           </View>
         )}
       </View>
