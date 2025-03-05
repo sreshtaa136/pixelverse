@@ -207,6 +207,9 @@ const Create = () => {
               placeholder="The AI prompt of your video...."
               handleChangeText={(e) => setForm({ ...form, prompt: e })}
               otherStyles="mt-7"
+              multiline={true}
+              numberOfLines={6}
+              textAlignVertical={"top"}
             />
             {/* submit */}
             <CustomButton
@@ -217,7 +220,7 @@ const Create = () => {
             />
           </ScrollView>
         </KeyboardAvoidingView>
-        {isFileLoading && (
+        {(isFileLoading || uploading) && (
           <View className="justify-center items-center absolute w-full h-[120%] bg-black-200/60 top-0 left-0 z-50">
             <ActivityIndicator size="large" />
           </View>

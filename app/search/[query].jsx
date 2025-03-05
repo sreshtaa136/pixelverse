@@ -1,19 +1,20 @@
-import { View, Text } from "react-native";
+import { View, Text, TouchableOpacity, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { FlatList } from "react-native-gesture-handler";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import SearchInput from "@/components/SearchInput";
 import EmptyState from "@/components/EmptyState";
 import { useEffect, useState } from "react";
-import { searchPosts } from "@/lib/appwrite";
 import useFunction from "@/lib/useFunction";
 import VideoCard from "@/components/VideoCard";
+import { searchVideos } from "@/lib/storageFunctions";
+import { icons } from "@/constants";
 
 const Search = () => {
   const { query } = useLocalSearchParams();
   // higher order function (custom)
-  const { data: posts, refetch } = useFunction(() => searchPosts(query));
+  const { data: posts, refetch } = useFunction(() => searchVideos(query));
 
   useEffect(() => {
     refetch();
@@ -24,7 +25,7 @@ const Search = () => {
       <SafeAreaView className="bg-primary h-full">
         <FlatList
           data={posts ?? []}
-          keyExtractor={(item) => item.$id}
+          keyExtractor={(item) => item.objectID}
           renderItem={({ item }) => <VideoCard video={item} />}
           ListHeaderComponent={() => <FlatListHeader query={query} />}
           // what to render when list is empty
@@ -44,6 +45,17 @@ const Search = () => {
 const FlatListHeader = ({ query }) => {
   return (
     <View className="my-6 px-4">
+      {/* back button */}
+      <TouchableOpacity
+        className="w-full items-start mb-5"
+        onPress={() => router.back()}
+      >
+        <Image
+          source={icons.arrowBack}
+          resizeMode="contain"
+          className="w-7 h-7"
+        />
+      </TouchableOpacity>
       <Text className="font-pmedium text-md text-gray-100">Search results</Text>
       <Text className="text-white text-2xl font-psemibold">{query}</Text>
       <View className="mt-6 mb-8">
