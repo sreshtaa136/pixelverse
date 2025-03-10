@@ -1,9 +1,4 @@
-import {
-  View,
-  TouchableOpacity,
-  Image,
-  ActivityIndicator,
-} from "react-native";
+import { View, TouchableOpacity, Image, ActivityIndicator } from "react-native";
 import React, { useEffect, useState } from "react";
 import { FlatList } from "react-native-gesture-handler";
 import * as Animatable from "react-native-animatable";
@@ -36,7 +31,7 @@ const Trending = ({ posts }) => {
         // 70% of it is on the screen.
         itemVisiblePercentThreshold: 70,
       }}
-      contentOffset={{ x: posts.length > 1 ? 100 : 0 }} // initial horizontal scroll offset
+      contentOffset={{ x: posts?.length > 1 ? 100 : 0 }} // initial horizontal scroll offset
       showsHorizontalScrollIndicator={false} // Hides the scrollbar
     />
   );

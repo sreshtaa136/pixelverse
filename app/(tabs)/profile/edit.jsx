@@ -23,7 +23,7 @@ import CustomButton from "@/components/CustomButton";
 import * as DocumentPicker from "expo-document-picker";
 import * as ImagePicker from "expo-image-picker";
 import { router } from "expo-router";
-import { updateUserProfile } from "@/lib/appwrite";
+import { updateUserProfile } from "@/lib/storageFunctions";
 import { getCurrentUser } from "@/lib/appwrite";
 import useFunction from "@/lib/useFunction";
 
@@ -54,7 +54,6 @@ const EditProfile = () => {
       aspect: [4, 3],
       quality: 1,
     });
-    setIsFileLoading(false);
     // Check if the user successfully selected a file
     if (!result.canceled && result.assets?.[0]) {
       const file = result.assets[0];
@@ -82,6 +81,7 @@ const EditProfile = () => {
         }, 100); // Add a slight delay before showing the alert for better UX
       }
     }
+    setIsFileLoading(false);
   };
 
   const submit = async () => {
@@ -92,7 +92,7 @@ const EditProfile = () => {
     try {
       await updateUserProfile({
         ...form,
-        userId: user.$id,
+        userId: user.uid,
       });
       Alert.alert("Success", "Profile updated successfully");
       refreshUserData();
@@ -110,8 +110,7 @@ const EditProfile = () => {
   };
 
   useEffect(() => {
-    if (user) {
-      console.log("USER", user);
+    if (user && (!form.username || !form.email)) {
       setForm({
         ...form,
         username: user.username,
@@ -148,11 +147,16 @@ const EditProfile = () => {
                 Avatar
               </Text>
               <TouchableOpacity onPress={() => openPicker()}>
-                {form.avatar || user.avatar ? (
+                {form.avatar?.uri || user.avatar ? (
                   <View className="flex flex-row justify-start gap-3 items-center">
                     <View className="w-[8em] h-[8em] border border-secondary rounded-[50%] flex justify-center items-center p-0.5 relative">
                       <Image
-                        source={{ uri: form.avatar?.uri || user.avatar }}
+                        key={form.avatar?.uri || user.avatar}
+                        source={
+                          form.avatar?.uri
+                            ? { uri: form.avatar.uri }
+                            : { uri: user.avatar }
+                        }
                         className="w-[100%] h-[100%] rounded-[50%]"
                         resizeMode="cover"
                       />
@@ -199,7 +203,7 @@ const EditProfile = () => {
               value={form.email}
               editable={false}
               otherStyles="mt-7"
-              inputStyles="text-gray-500"
+              inputStyles="text-gray-400"
             />
             {/* submit */}
             <CustomButton
@@ -210,7 +214,7 @@ const EditProfile = () => {
             />
           </ScrollView>
         </KeyboardAvoidingView>
-        {isFileLoading && (
+        {(isFileLoading || uploading) && (
           <View className="justify-center items-center absolute w-full h-[120%] bg-black-200/60 top-0 left-0 z-50">
             <ActivityIndicator size="large" />
           </View>

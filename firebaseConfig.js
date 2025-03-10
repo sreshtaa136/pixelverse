@@ -9,7 +9,7 @@ import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 import Constants from "expo-constants";
-import { algoliasearch } from 'algoliasearch';
+import { algoliasearch } from "algoliasearch";
 
 const firebaseConfig = {
   apiKey: Constants.expoConfig.extra.API_KEY,
