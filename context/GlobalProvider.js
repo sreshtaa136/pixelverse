@@ -59,6 +59,10 @@ const GlobalProvider = ({ children }) => {
         setUser,
         loading,
         refreshUserData,
+        posts,
+        refetchPosts,
+        userPosts,
+        refetchUserPosts,
       }}
     >
       {children}

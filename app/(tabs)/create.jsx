@@ -109,6 +109,8 @@ const Create = () => {
         userId: user.uid,
       });
       Alert.alert("Success", "Post uploaded successfully");
+      refetchPosts();
+      refetchUserPosts();
       router.push("/home");
     } catch (error) {
       Alert.alert("Error", error.message);

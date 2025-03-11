@@ -24,7 +24,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import { getAllPosts, getLatestPosts } from "@/lib/storageFunctions";
 
 const Home = () => {
-  const { user } = useGlobalContext();
+  const { user, posts, refetchPosts } = useGlobalContext();
   const [refreshing, setRefreshing] = useState(false);
   // higher order function (custom)
   const { data: posts, refetch: refetchPosts } = useFunction(getAllPosts);
