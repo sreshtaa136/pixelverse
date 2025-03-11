@@ -11,11 +11,13 @@ import icons from "@/constants/icons";
 import InfoBox from "@/components/InfoBox";
 import { router } from "expo-router";
 import { logOut } from "@/lib/authFunctions";
-import { getUserPosts } from "@/lib/storageFunctions";
+import { getUserData, getUserPosts } from "@/lib/storageFunctions";
 
 const Profile = () => {
   const { user, setUser, setIsLogged } = useGlobalContext();
   const { data: posts } = useFunction(() => getUserPosts(user?.uid));
+  const [userDetails, setUserDetails] = useState("");
+  const [userDetailsLoading, setuserDetailsLoading] = useState(false);
 
   async function logout() {
     // await signOut();
@@ -27,35 +29,57 @@ const Profile = () => {
     router.replace("/sign-in");
   }
 
+  const refreshUserDetails = async () => {
+    try {
+      setuserDetailsLoading(true);
+      const res = await getUserData(user?.uid);
+      console.log("first", res);
+      setUserDetails(res);
+    } catch (error) {
+      console.error("Error loading user details in the profile page");
+    } finally {
+      setuserDetailsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    refreshUserDetails();
+  }, []);
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaView className="bg-primary h-full">
-        <FlatList
-          data={posts ?? []}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <VideoCard
-              video={{
-                ...item,
-                creator: { username: user?.username, avatar: user?.avatar },
-              }}
-            />
-          )}
-          ListHeaderComponent={() => (
-            <FlatListHeader
-              user={user}
-              numPosts={posts.length}
-              logout={logout}
-            />
-          )}
-          // what to render when list is empty
-          ListEmptyComponent={() => (
-            <EmptyState
-              title="No videos found"
-              subtitle="Try uploading a video"
-            />
-          )}
-        />
+        {!userDetailsLoading && (
+          <FlatList
+            data={posts ?? []}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => (
+              <VideoCard
+                video={{
+                  ...item,
+                  creator: {
+                    username: userDetails?.username,
+                    avatar: userDetails?.avatar,
+                  },
+                }}
+              />
+            )}
+            ListHeaderComponent={() => (
+              <FlatListHeader
+                user={userDetails}
+                numPosts={posts.length}
+                logout={logout}
+              />
+            )}
+            // what to render when list is empty
+            ListEmptyComponent={() => (
+              <EmptyState
+                title="No videos found"
+                subtitle="Try uploading a video"
+              />
+            )}
+          />
+        )}
       </SafeAreaView>
     </GestureHandlerRootView>
   );

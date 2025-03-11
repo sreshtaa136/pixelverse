@@ -12,6 +12,8 @@ export default {
       APP_ID: process.env.APP_ID,
       ALGOLIA_APP_ID: process.env.ALGOLIA_APP_ID,
       ALGOLIA_ADMIN_KEY: process.env.ALGOLIA_ADMIN_KEY,
+      CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,
+      CLOUDINARY_UPLOAD_PRESET: process.env.CLOUDINARY_UPLOAD_PRESET,
     },
   },
 };

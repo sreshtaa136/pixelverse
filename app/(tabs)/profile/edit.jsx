@@ -23,7 +23,7 @@ import CustomButton from "@/components/CustomButton";
 import * as DocumentPicker from "expo-document-picker";
 import * as ImagePicker from "expo-image-picker";
 import { router } from "expo-router";
-import { updateUserProfile } from "@/lib/storageFunctions";
+import { updateUserProfile, getUserData } from "@/lib/storageFunctions";
 import { getCurrentUser } from "@/lib/appwrite";
 import useFunction from "@/lib/useFunction";
 
@@ -42,6 +42,8 @@ const EditProfile = () => {
     avatar: null,
     email: "",
   });
+  const [userDetails, setUserDetails] = useState("");
+  const [userDetailsLoading, setUserDetailsLoading] = useState(false);
 
   // Function to open a document picker for selecting images or videos
   const openPicker = async () => {
@@ -109,15 +111,32 @@ const EditProfile = () => {
     }
   };
 
+  const refreshUserDetails = async () => {
+    try {
+      setUserDetailsLoading(true);
+      const res = await getUserData(user?.uid);
+      console.log("edit page", res);
+      setUserDetails(res);
+    } catch (error) {
+      console.error("Error loading user details in the edit page");
+    } finally {
+      setUserDetailsLoading(false);
+    }
+  };
+
   useEffect(() => {
-    if (user && (!form.username || !form.email)) {
+    refreshUserDetails();
+  }, []);
+
+  useEffect(() => {
+    if (!userDetailsLoading && (!form.username || !form.email)) {
       setForm({
         ...form,
-        username: user.username,
-        email: user.email,
+        username: userDetails.username,
+        email: userDetails.email,
       });
     }
-  }, [user]);
+  }, [userDetailsLoading]);
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
@@ -147,15 +166,15 @@ const EditProfile = () => {
                 Avatar
               </Text>
               <TouchableOpacity onPress={() => openPicker()}>
-                {form.avatar?.uri || user.avatar ? (
+                {form.avatar?.uri || userDetails.avatar ? (
                   <View className="flex flex-row justify-start gap-3 items-center">
                     <View className="w-[8em] h-[8em] border border-secondary rounded-[50%] flex justify-center items-center p-0.5 relative">
                       <Image
-                        key={form.avatar?.uri || user.avatar}
+                        key={form.avatar?.uri || userDetails.avatar}
                         source={
                           form.avatar?.uri
                             ? { uri: form.avatar.uri }
-                            : { uri: user.avatar }
+                            : { uri: userDetails.avatar }
                         }
                         className="w-[100%] h-[100%] rounded-[50%]"
                         resizeMode="cover"
@@ -214,7 +233,7 @@ const EditProfile = () => {
             />
           </ScrollView>
         </KeyboardAvoidingView>
-        {(isFileLoading || uploading) && (
+        {(isFileLoading || uploading || userDetailsLoading) && (
           <View className="justify-center items-center absolute w-full h-[120%] bg-black-200/60 top-0 left-0 z-50">
             <ActivityIndicator size="large" />
           </View>

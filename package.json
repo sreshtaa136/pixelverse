@@ -20,6 +20,8 @@
     "@react-native-firebase/firestore": "^21.11.0",
     "@react-navigation/native": "^7.0.0",
     "algoliasearch": "^5.20.3",
+    "axios": "^1.8.2",
+    "cloudinary-react-native": "^1.0.1",
     "expo": "~52.0.14",
     "expo-av": "^15.0.1",
     "expo-constants": "~17.0.3",

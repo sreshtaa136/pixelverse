@@ -23,7 +23,10 @@ import CustomButton from "@/components/CustomButton";
 import * as DocumentPicker from "expo-document-picker";
 import * as ImagePicker from "expo-image-picker";
 import { router } from "expo-router";
-import { createVideoPost } from "@/lib/storageFunctions";
+import {
+  createCloudinaryVideoPost,
+  createVideoPost,
+} from "@/lib/storageFunctions";
 
 const Create = () => {
   const { user, loading: userLoading } = useGlobalContext();
@@ -101,7 +104,7 @@ const Create = () => {
     }
     setUploading(true);
     try {
-      await createVideoPost({
+      await createCloudinaryVideoPost({
         ...form,
         userId: user.uid,
       });
@@ -174,7 +177,7 @@ const Create = () => {
               </TouchableOpacity>
             </View>
             {/* thumbnail */}
-            <View className="mt-7 space-y-2">
+            {/* <View className="mt-7 space-y-2">
               <Text className="text-base text-gray-100 font-pmedium mb-3">
                 Thumbnail Image
               </Text>
@@ -199,7 +202,7 @@ const Create = () => {
                   </View>
                 )}
               </TouchableOpacity>
-            </View>
+            </View> */}
             {/* prompt */}
             <FormField
               title="AI Prompt"
