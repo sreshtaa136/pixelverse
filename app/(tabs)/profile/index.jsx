@@ -15,9 +15,14 @@ import { getUserData, getUserPosts } from "@/lib/storageFunctions";
 
 const Profile = () => {
   const { user, setUser, setIsLogged } = useGlobalContext();
-  const { data: posts } = useFunction(() => getUserPosts(user?.uid));
+  const { data: posts, refetch: refetchPosts } = useFunction(() =>
+    getUserPosts(user?.uid)
+  );
   const [userDetails, setUserDetails] = useState("");
   const [userDetailsLoading, setuserDetailsLoading] = useState(false);
+  const [userPosts, setUserPosts] = useState(
+    useFunction(() => getUserPosts(user?.uid))
+  );
 
   async function logout() {
     // await signOut();
@@ -44,6 +49,7 @@ const Profile = () => {
 
   useEffect(() => {
     refreshUserDetails();
+    refetchPosts();
   }, []);
 
   return (
