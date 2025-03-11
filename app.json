@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "Aura",
-    "slug": "aura",
+    "name": "Pixelverse",
+    "slug": "pixelverse",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/logo.png",
-    "scheme": "aura",
+    "scheme": "pixelverse",
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/images/logo-small.png",

@@ -74,13 +74,16 @@ const SignUp = () => {
               minHeight: Dimensions.get("window").height - 100,
             }}
           >
-            <Image
+            {/* <Image
               source={images.logo}
               className="w-[10rem] h-[3rem]"
               resizeMode="contain"
-            />
-            <Text className="text-2xl text-white font-psemibold mt-12">
-              Sign up to Aura
+            /> */}
+            <Text className="text-4xl text-secondary-200 font-bold text-left mt-10">
+              Pixelverse
+            </Text>
+            <Text className="text-2xl text-white font-psemibold mt-10">
+              Sign up
             </Text>
             <FormField
               title="Username"

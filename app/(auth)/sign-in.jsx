@@ -53,13 +53,16 @@ const SignIn = () => {
               minHeight: Dimensions.get("window").height - 100,
             }}
           >
-            <Image
+            {/* <Image
               source={images.logo}
               className="w-[10rem] h-[3rem]"
               resizeMode="contain"
-            />
+            /> */}
+            <Text className="text-4xl text-secondary-200 font-bold text-left">
+              Pixelverse
+            </Text>
             <Text className="text-2xl text-white font-psemibold mt-12">
-              Sign in to Aura
+              Sign in
             </Text>
             <FormField
               title="Email"

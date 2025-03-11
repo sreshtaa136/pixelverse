@@ -18,11 +18,14 @@ export default function App() {
       <SafeAreaView className="bg-primary h-full">
         <ScrollView contentContainerStyle={{ height: "100%" }}>
           <View className="h-full w-full flex justify-center items-center px-4">
-            <Image
+            {/* <Image
               source={images.logo}
               className="w-[10rem] h-[3rem]"
               resizeMode="contain"
-            />
+            /> */}
+            <Text className="text-4xl text-secondary-200 font-bold text-center">
+              Pixelverse
+            </Text>
             <Image
               source={images.cards}
               className="max-w-[380px] w-full h-[25rem] mt-7"
@@ -31,7 +34,7 @@ export default function App() {
             <View className="relative mt-5 px-8">
               <Text className="text-3xl text-white font-bold text-center">
                 Discover Endless Possibilities with{" "}
-                <Text className="text-secondary-200">Aora</Text>
+                <Text className="text-secondary-200">Pixelverse</Text>
               </Text>
               <Image
                 source={images.path}
@@ -41,7 +44,7 @@ export default function App() {
             </View>
             <Text className="text-white text-lg mt-7 font-pregular text-center">
               Where Creativity Meets Innovation: Embark on a Journey of
-              Limitless Exploration with Aora
+              Limitless Exploration with Pixelverse
             </Text>
             <CustomButton
               title="Continue with Email"
