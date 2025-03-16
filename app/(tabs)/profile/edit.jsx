@@ -77,11 +77,12 @@ const EditProfile = () => {
       });
     } else {
       // If the user cancels the file picker
-      if (result.assets[0]) {
-        setTimeout(() => {
-          Alert.alert("Document picked", JSON.stringify(result, null, 2));
-        }, 100); // Add a slight delay before showing the alert for better UX
-      }
+      // if (result.assets[0]) {
+      //   setTimeout(() => {
+      //     Alert.alert("Document picked", JSON.stringify(result, null, 2));
+      //   }, 100); // Add a slight delay before showing the alert for better UX
+      // }
+      console.log("picker cancelled");
     }
     setIsFileLoading(false);
   };
