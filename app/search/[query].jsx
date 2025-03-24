@@ -1,4 +1,10 @@
-import { View, Text, TouchableOpacity, Image } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  ActivityIndicator,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { FlatList } from "react-native-gesture-handler";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -14,7 +20,11 @@ import { icons } from "@/constants";
 const Search = () => {
   const { query } = useLocalSearchParams();
   // higher order function (custom)
-  const { data: posts, refetch } = useFunction(() => searchVideos(query));
+  const {
+    data: posts,
+    refetch,
+    isLoading,
+  } = useFunction(() => searchVideos(query));
 
   useEffect(() => {
     refetch();
@@ -29,12 +39,16 @@ const Search = () => {
           renderItem={({ item }) => <VideoCard video={item} />}
           ListHeaderComponent={() => <FlatListHeader query={query} />}
           // what to render when list is empty
-          ListEmptyComponent={() => (
-            <EmptyState
-              title="No videos found"
-              subtitle="No videos found for this search"
-            />
-          )}
+          ListEmptyComponent={() =>
+            isLoading ? (
+              <ActivityIndicator size="medium" />
+            ) : (
+              <EmptyState
+                title="No videos found"
+                subtitle="No videos found for this search"
+              />
+            )
+          }
         />
         {/* <StatusBar backgroundColor="#161622" style="light" /> */}
       </SafeAreaView>
